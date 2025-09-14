@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthCare Pro Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        .page-content {
+            display: none;
+        }
+        .page-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="flex-shrink-0 w-64 bg-white border-r border-gray-200 p-4 flex flex-col items-center shadow-lg">
+        <div class="mb-8 flex flex-col items-center">
+            <h1 class="text-2xl font-bold text-gray-800">MediNeura</h1>
+            <p class="text-sm text-gray-500 text-center">The AI Brain for Hospital Growth</p>
+        </div>
+        <nav class="w-full space-y-2">
+            <a href="#dashboard" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200 active-link bg-gray-100 text-blue-600">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                Dashboard
+            </a>
+            <a href="#patient-management" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                Patient Management
+            </a>
+            <a href="#crm-leads" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-4a4 4 0 01-4-4V7a4 4 0 014-4h4a4 4 0 014 4v9a4 4 0 01-4 4z"></path></svg>
+                CRM & Leads
+            </a>
+            <a href="#prescriptions" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2m-2 4l-2 2m0 0l-2-2m2 2V5"></path></svg>
+                Prescriptions
+            </a>
+            <a href="#payments" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5h-4a2 2 0 01-2-2V5a2 2 0 012-2h4a2 2 0 012 2v12a2 2 0 01-2 2z"></path></svg>
+                Payments
+            </a>
+            <a href="#lead-capture" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Lead Capture
+            </a>
+            <a href="#ivr-system" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"></path></svg>
+                IVR System
+            </a>
+            <a href="#marketing" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h10M7 16h10M4 21h16a2 2 0 002-2V5a2 2 0 00-2-2H4a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                Marketing
+            </a>
+            <a href="#reports" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0h6m-3 0a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z"></path></svg>
+                Reports
+            </a>
+            <a href="#telemedicine" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h.01M12 12h.01M15 12h.01M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                Telemedicine
+            </a>
+            <a href="#ai-clinical-scribe" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                AI Clinical Scribe
+            </a>
+            <a href="#insurance-claims" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9v3m0 0v3m0-3h3m-3 0h-3m-2.26-.642A5 5 0 0012 18a5 5 0 00-4.74.642M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Insurance Claim Fast-Track
+            </a>
+            <a href="#ai-risk-predictor" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2-3 .895-3 2 1.343 2 3 2m0-8a4 4 0 100-8 4 4 0 000 8z"></path></svg>
+                AI Patient Risk Predictor
+            </a>
+            <a href="#integration-hub" class="nav-item flex items-center p-3 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2-3 .895-3 2 1.343 2 3 2m0-8a4 4 0 100-8 4 4 0 000 8z"></path></svg>
+                One-Click Integration Hub
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-8" id="main-content">
+        <!-- The page contents will be dynamically rendered into these divs -->
+        <div id="page-dashboard" class="page-content active">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search patients, appointments, prescriptions..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Dashboard</h2>
+                <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h.01M7 11h.01M7 15h.01M11 15h.01M15 15h.01M17 11h.01M17 15h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Schedule Appointment
+                </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Total Patients</p>
+                    <div class="flex items-end justify-between mt-1">
+                        <span class="text-4xl font-bold text-gray-900">2,847</span>
+                        <div class="bg-green-100 text-green-600 text-xs font-medium px-2 py-1 rounded-full flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414L10 3.586l4.707 4.707a1 1 0 01-1.414 1.414L11 6.414V16a1 1 0 11-2 0V6.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                            +12.5%
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Today's Appointments</p>
+                    <div class="flex items-end justify-between mt-1">
+                        <span class="text-4xl font-bold text-gray-900">23</span>
+                        <div class="bg-green-100 text-green-600 text-xs font-medium px-2 py-1 rounded-full flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414L10 3.586l4.707 4.707a1 1 0 01-1.414 1.414L11 6.414V16a1 1 0 11-2 0V6.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                            +4.2%
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Monthly Revenue</p>
+                    <div class="flex items-end justify-between mt-1">
+                        <span class="text-4xl font-bold text-gray-900">₹84,932</span>
+                        <div class="bg-green-100 text-green-600 text-xs font-medium px-2 py-1 rounded-full flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414L10 3.586l4.707 4.707a1 1 0 01-1.414 1.414L11 6.414V16a1 1 0 11-2 0V6.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                            +8.1%
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Active Prescriptions</p>
+                    <div class="flex items-end justify-between mt-1">
+                        <span class="text-4xl font-bold text-gray-900">1,429</span>
+                        <div class="bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-full flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414L10 16.414l-4.707-4.707a1 1 0 011.414-1.414L9 13.586V4a1 1 0 112 0v9.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            -2.4%
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Recent Activities</h3>
+                        <a href="#" class="text-blue-600 text-sm font-medium hover:underline">View All</a>
+                    </div>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h.01M7 11h.01M7 15h.01M11 15h.01M15 15h.01M17 11h.01M17 15h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <p class="text-sm font-medium text-gray-800">New appointment scheduled with John Doe</p>
+                                <p class="text-xs text-gray-500 mt-0.5">5 minutes ago</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-green-100 text-green-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8a4 4 0 100-8 4 4 0 000 8z"></path></svg>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <p class="text-sm font-medium text-gray-800">Payment received from Sarah Smith - ₹250</p>
+                                <p class="text-xs text-gray-500 mt-0.5">15 minutes ago</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-purple-100 text-purple-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2m-2 4l-2 2m0 0l-2-2m2 2V5"></path></svg>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <p class="text-sm font-medium text-gray-800">Prescription updated for Michael Johnson</p>
+                                <p class="text-xs text-gray-500 mt-0.5">30 minutes ago</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-orange-100 text-orange-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <p class="text-sm font-medium text-gray-800">New lead captured from website form</p>
+                                <p class="text-xs text-gray-500 mt-0.5">1 hour ago</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-indigo-100 text-indigo-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"></path></svg>
+                            </div>
+                            <div class="ml-4 flex-grow">
+                                <p class="text-sm font-medium text-gray-800">IVR call completed for appointment reminder</p>
+                                <p class="text-xs text-gray-500 mt-0.5">2 hours ago</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Today's Appointments</h3>
+                        <a href="#" class="text-blue-600 text-sm font-medium hover:underline">View Calendar</a>
+                    </div>
+                    <ul class="space-y-4">
+                        <li class="flex items-center">
+                            <div class="flex-grow">
+                                <p class="font-medium text-gray-800">Emma Thompson</p>
+                                <p class="text-sm text-gray-500">Consultation</p>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                09:00 AM
+                                <svg class="w-5 h-5 ml-2 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                            <div class="flex-grow">
+                                <p class="font-medium text-gray-800">James Wilson</p>
+                                <p class="text-sm text-gray-500">Follow-up</p>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                10:30 AM
+                                <svg class="w-5 h-5 ml-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414L7 9.586V7a1 1 0 10-2 0v2.586l-1.293 1.293a1 1 0 001.414 1.414L8 10.414l2.293 2.293a1 1 0 001.414-1.414z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                            <div class="flex-grow">
+                                <p class="font-medium text-gray-800">Lisa Anderson</p>
+                                <p class="text-sm text-gray-500">Check-up</p>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                02:15 PM
+                                <svg class="w-5 h-5 ml-2 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                            <div class="flex-grow">
+                                <p class="font-medium text-gray-800">Robert Brown</p>
+                                <p class="text-sm text-gray-500">Treatment</p>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                03:45 PM
+                                <svg class="w-5 h-5 ml-2 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <button id="addPatientQuickActionBtn" class="flex flex-col items-center justify-center p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors duration-200">
+                        <svg class="w-8 h-8 text-blue-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4.125 4.125 0 011.666 8.019m-1.666-8.019a4.125 4.125 0 10-1.666 8.019m1.666-8.019V21"></path></svg>
+                        <span class="text-sm font-medium text-gray-800">Add Patient</span>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors duration-200">
+                        <svg class="w-8 h-8 text-green-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2m-2 4l-2 2m0 0l-2-2m2 2V5"></path></svg>
+                        <span class="text-sm font-medium text-gray-800">New Prescription</span>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors duration-200">
+                        <svg class="w-8 h-8 text-purple-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h.01M7 11h.01M7 15h.01M11 15h.01M15 15h.01M17 11h.01M17 15h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="text-sm font-medium text-gray-800">Schedule</span>
+                    </button>
+                    <button class="flex flex-col items-center justify-center p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors duration-200">
+                        <svg class="w-8 h-8 text-red-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8l-4 4m0 0l-4-4m4 4v12m8-12l-4 4m0 0l-4-4m4 4v12"></path></svg>
+                        <span class="text-sm font-medium text-gray-800">View Reports</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-patient-management" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search patients by name, email, or phone..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Patient Management</h2>
+                <button id="addPatientBtn" class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Add Patient
+                </button>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div class="flex flex-col">
+                    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="patientsTableBody" class="bg-white divide-y divide-gray-200">
+                                        <!-- Patient data will be dynamically loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-crm-leads" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search leads..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">CRM & Lead Management</h2>
+                <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Add Lead
+                </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">New Leads</p>
+                    <span class="text-4xl font-bold text-gray-900">1</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Qualified</p>
+                    <span class="text-4xl font-bold text-gray-900">1</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Converted</p>
+                    <span class="text-4xl font-bold text-gray-900">0</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Pipeline Value</p>
+                    <span class="text-4xl font-bold text-gray-900">₹16,500</span>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lead</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Follow-up</th>
+                            <th scope="col" class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap"><p class="text-sm font-medium text-gray-900">Dummy Lead 1</p><p class="text-xs text-gray-500">dummy.1@example.com<br>+91 (111) 222-3333</p></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Website Form</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">new</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹3,500</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">22/1/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">...</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap"><p class="text-sm font-medium text-gray-900">Dummy Lead 2</p><p class="text-xs text-gray-500">dummy.2@example.com<br>+91 (111) 444-5555</p></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Phone Call</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">contacted</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹5,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">25/1/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">...</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap"><p class="text-sm font-medium text-gray-900">Dummy Lead 3</p><p class="text-xs text-gray-500">dummy.3@example.com<br>+91 (111) 666-7777</p></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Referral</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">qualified</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹8,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Not scheduled</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="page-prescriptions" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search prescriptions by patient, doctor, or medication..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Prescription Management</h2>
+                <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    New Prescription
+                </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Active Prescriptions</p>
+                    <span class="text-4xl font-bold text-gray-900">2</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Pending Refills</p>
+                    <span class="text-4xl font-bold text-gray-900">2</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Total Medications</p>
+                    <span class="text-4xl font-bold text-gray-900">4</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Completed</p>
+                    <span class="text-4xl font-bold text-gray-900">1</span>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Doctor</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Medications</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Diagnosis</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Issued</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap"><p class="text-sm font-medium text-gray-900">Emma Thompson</p><p class="text-xs text-gray-500">ID: 1</p></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Dr. Sarah Johnson</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Amoxicillin 500mg, Ibuprofen 400mg</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Dental infection</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">20/1/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">active</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">...</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap"><p class="text-sm font-medium text-gray-900">James Wilson</p><p class="text-xs text-gray-500">ID: 2</p></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Dr. Michael Brown</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Albuterol Inhaler 90mcg</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Asthma maintenance</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">18/1/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">active</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">...</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap"><p class="text-sm font-medium text-gray-900">Lisa Anderson</p><p class="text-xs text-gray-500">ID: 3</p></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Dr. Sarah Johnson</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Omeprazole 20mg</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">GERD</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15/1/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">completed</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="page-payments" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search invoices..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Payment Management</h2>
+                <div>
+                    <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Record Payment
+                    </button>
+                    <button class="bg-green-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-green-700 transition-colors duration-200 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Create Invoice
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Total Revenue</p>
+                    <span class="text-4xl font-bold text-gray-900">₹375.00</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Pending Payments</p>
+                    <span class="text-4xl font-bold text-gray-900">1</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Completed</p>
+                    <span class="text-4xl font-bold text-gray-900">2</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Refunds</p>
+                    <span class="text-4xl font-bold text-gray-900">₹75.00</span>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th scope="col" class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap"><p class="text-sm font-medium text-gray-900">Emma Thompson</p><p class="text-xs text-gray-500">Dental consultation and cleaning</p></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹250.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Card</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">completed</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">20/1/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">...</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap"><p class="text-sm font-medium text-gray-900">James Wilson</p><p class="text-xs text-gray-500">Root canal treatment</p></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹450.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Insurance</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">pending</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">19/1/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">...</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap"><p class="text-sm font-medium text-gray-900">Lisa Anderson</p><p class="text-xs text-gray-500">Follow-up examination</p></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹125.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Cash</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">completed</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">18/1/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">...</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap"><p class="text-sm font-medium text-gray-900">Emma Thompson</p><p class="text-xs text-gray-500">Cancelled appointment refund</p></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-₹75.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Card</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">refunded</span></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">17/1/2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="page-lead-capture" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search forms..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Lead Capture</h2>
+                <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Create Form
+                </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Total Forms</p>
+                    <span class="text-4xl font-bold text-gray-900">3</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Total Submissions</p>
+                    <span class="text-4xl font-bold text-gray-900">2</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Avg. Conversion</p>
+                    <span class="text-4xl font-bold text-gray-900">3.0%</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">New Leads</p>
+                    <span class="text-4xl font-bold text-gray-900">1</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-ivr-system" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search IVR flows..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">IVR System</h2>
+                <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Create Flow
+                </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Total Flows</p>
+                    <span class="text-4xl font-bold text-gray-900">3</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Total Calls</p>
+                    <span class="text-4xl font-bold text-gray-900">3</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Success Rate</p>
+                    <span class="text-4xl font-bold text-gray-900">58.0%</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Active Calls</p>
+                    <span class="text-4xl font-bold text-gray-900">0</span>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">IVR Flows</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="border border-gray-200 p-4 rounded-lg hover:shadow-md transition-shadow duration-200">
+                        <h4 class="font-medium text-gray-900">Dummy Flow 1</h4>
+                        <p class="text-sm text-gray-500 mt-1">This is a description for Dummy Flow 1.</p>
+                        <p class="text-xs text-gray-400 mt-2">Total Calls: 123</p>
+                        <p class="text-xs text-gray-400">Success Rate: 95.0%</p>
+                    </div>
+                    <div class="border border-gray-200 p-4 rounded-lg hover:shadow-md transition-shadow duration-200">
+                        <h4 class="font-medium text-gray-900">Dummy Flow 2</h4>
+                        <p class="text-sm text-gray-500 mt-1">This is a description for Dummy Flow 2.</p>
+                        <p class="text-xs text-gray-400 mt-2">Total Calls: 456</p>
+                        <p class="text-xs text-gray-400">Success Rate: 80.5%</p>
+                    </div>
+                    <div class="border border-gray-200 p-4 rounded-lg hover:shadow-md transition-shadow duration-200">
+                        <h4 class="font-medium text-gray-900">Dummy Flow 3</h4>
+                        <p class="text-sm text-gray-500 mt-1">This is a description for Dummy Flow 3.</p>
+                        <p class="text-xs text-gray-400 mt-2">Total Calls: 789</p>
+                        <p class="text-xs text-gray-400">Success Rate: 65.2%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-marketing" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search templates..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Marketing Templates</h2>
+                <div>
+                    <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Create Template
+                    </button>
+                    <button class="bg-green-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-green-700 transition-colors duration-200 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Send Campaign
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Total Templates</p>
+                    <span class="text-4xl font-bold text-gray-900">5</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Active Templates</p>
+                    <span class="text-4xl font-bold text-gray-900">4</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Total Usage</p>
+                    <span class="text-4xl font-bold text-gray-900">802</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Avg. Open Rate</p>
+                    <span class="text-4xl font-bold text-gray-900">89.4%</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-reports" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search reports..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Reports & Analytics</h2>
+                <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Export Report
+                </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Total Patients</p>
+                    <span class="text-4xl font-bold text-gray-900">2,847</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">New Patients</p>
+                    <span class="text-4xl font-bold text-gray-900">89</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Appointments</p>
+                    <span class="text-4xl font-bold text-gray-900">245</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="text-gray-500">Revenue</p>
+                    <span class="text-4xl font-bold text-gray-900">₹84,932</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-telemedicine" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search telemedicine records..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Telemedicine</h2>
+                <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Start New Consultation
+                </button>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Upcoming Video Consultations</h3>
+                <p class="text-gray-500">Your telemedicine consultation list would appear here.</p>
+            </div>
+        </div>
+
+        <div id="page-ai-clinical-scribe" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search scribe notes..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">AI Clinical Scribe</h2>
+                <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Transcribe Audio
+                </button>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Transcription History</h3>
+                <p class="text-gray-500">Transcribed clinical notes and patient histories would be displayed here.</p>
+            </div>
+        </div>
+
+        <div id="page-insurance-claims" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search claims..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Insurance Claim Fast-Track</h2>
+                <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Submit New Claim
+                </button>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Recent Claims Status</h3>
+                <p class="text-gray-500">A table of insurance claims and their real-time status would be displayed here.</p>
+            </div>
+        </div>
+
+        <div id="page-ai-risk-predictor" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search patient risk reports..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">AI Patient Risk Predictor</h2>
+                <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Generate Risk Score
+                </button>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Patient Risk Scores</h3>
+                <p class="text-gray-500">Predictive risk scores and alerts for patient health would be displayed here.</p>
+            </div>
+        </div>
+
+        <div id="page-integration-hub" class="page-content">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Search integrations..." class="w-96 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
+                </div>
+                <div class="flex items-center space-x-4">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m-3-13h6"></path></svg>
+                    <div class="flex items-center space-x-2">
+                        <img src="https://placehold.co/40x40/cbd5e1/4b5563?text=DR" alt="Dr. Sarah Johnson" class="w-10 h-10 rounded-full">
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-800">Dr. Sarah Johnson</p>
+                            <p class="text-gray-500">Healthcare Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">One-Click Integration Hub</h2>
+                <button class="bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Add Integration
+                </button>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Available Integrations</h3>
+                <p class="text-gray-500">A list of available third-party integrations would be displayed here.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Patient Modal -->
+    <div id="addPatientModal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Add New Patient</h3>
+            <form id="addPatientForm">
+                <div class="mb-4">
+                    <label for="patientName" class="block text-sm font-medium text-gray-700">Patient Name</label>
+                    <input type="text" id="patientName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="patientEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="patientEmail" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="patientPhone" class="block text-sm font-medium text-gray-700">Phone</label>
+                    <input type="tel" id="patientPhone" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" id="cancelPatientBtn" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors duration-200">Cancel</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200">Add Patient</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        function showModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js";
+
+        // Global variables provided by the environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db, auth, userId;
+        const mainContent = document.getElementById('main-content');
+        const navItems = document.querySelectorAll('.nav-item');
+        const addPatientForm = document.getElementById('addPatientForm');
+        
+        async function initFirebase() {
+            try {
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("User authenticated with UID:", userId);
+                        renderPage(window.location.hash.substring(1) || 'dashboard');
+                    } else {
+                         if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            await signInAnonymously(auth);
+                            userId = auth.currentUser.uid;
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Firebase initialization error:", error);
+            }
+        }
+        
+        function renderPage(pageId) {
+            const allPages = document.querySelectorAll('.page-content');
+            allPages.forEach(page => {
+                page.classList.remove('active');
+            });
+            const activePage = document.getElementById(`page-${pageId}`);
+            if (activePage) {
+                activePage.classList.add('active');
+            }
+
+            if (pageId === 'patient-management') {
+                renderPatients();
+            }
+        }
+
+        async function renderPatients() {
+            if (!db || !userId) {
+                console.error("Firebase not initialized or user not authenticated.");
+                return;
+            }
+
+            const patientsTableBody = document.getElementById('patientsTableBody');
+            patientsTableBody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-gray-500">Loading...</td></tr>';
+
+            const patientsCol = collection(db, `/artifacts/${appId}/users/${userId}/patients`);
+
+            onSnapshot(patientsCol, (snapshot) => {
+                patientsTableBody.innerHTML = ''; // Clear the table
+                if (snapshot.empty) {
+                    patientsTableBody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-gray-500">No patients added yet.</td></tr>';
+                    return;
+                }
+                snapshot.forEach((doc) => {
+                    const patient = doc.data();
+                    const row = `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap"><p class="text-sm font-medium text-gray-900">${patient.name}</p></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${patient.email}<br>${patient.phone}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${new Date(patient.createdAt).toLocaleDateString()}</td>
+                        </tr>
+                    `;
+                    patientsTableBody.innerHTML += row;
+                });
+            }, (error) => {
+                console.error("Error listening to patients collection:", error);
+                patientsTableBody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-red-500">Error loading patients.</td></tr>';
+            });
+        }
+
+        function handleHashChange() {
+            const hash = window.location.hash.substring(1);
+            navItems.forEach(item => {
+                const navHash = item.getAttribute('href').substring(1);
+                if (navHash === hash) {
+                    item.classList.add('active-link', 'bg-gray-100', 'text-blue-600');
+                } else {
+                    item.classList.remove('active-link', 'bg-gray-100', 'text-blue-600');
+                }
+            });
+            renderPage(hash);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initFirebase();
+            window.addEventListener('hashchange', handleHashChange);
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.hash = item.getAttribute('href').substring(1);
+                });
+            });
+
+            if (window.location.hash) {
+                handleHashChange();
+            } else {
+                renderPage('dashboard');
+            }
+            
+            document.getElementById('addPatientQuickActionBtn').addEventListener('click', () => showModal('addPatientModal'));
+            document.getElementById('addPatientBtn').addEventListener('click', () => showModal('addPatientModal'));
+            document.getElementById('cancelPatientBtn').addEventListener('click', () => closeModal('addPatientModal'));
+
+            addPatientForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('patientName').value;
+                const email = document.getElementById('patientEmail').value;
+                const phone = document.getElementById('patientPhone').value;
+                
+                if (db && userId) {
+                    try {
+                        const patientsCol = collection(db, `/artifacts/${appId}/users/${userId}/patients`);
+                        await addDoc(patientsCol, {
+                            name,
+                            email,
+                            phone,
+                            createdAt: Date.now()
+                        });
+                        closeModal('addPatientModal');
+                        addPatientForm.reset();
+                    } catch (error) {
+                        console.error("Error adding patient:", error);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
